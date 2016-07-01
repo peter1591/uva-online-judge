@@ -1,8 +1,9 @@
+#include <stdint.h>
 #include <iostream>
 
-void PrintAnswer(int ans, int n)
+void PrintAnswer(uint64_t ans, int n)
 {
-	if (ans == 1) {
+	if (ans <= 1) {
 		std::cout << "There is only 1 way to produce " << n << " cents change." << std::endl;
 	} else {
 		std::cout << "There are " << ans << " ways to produce " << n << " cents change." <<std::endl;
@@ -11,9 +12,9 @@ void PrintAnswer(int ans, int n)
 
 void Solve(int n)
 {
-	int coins[5] = {1, 5, 10, 25, 50};
+	static int coins[5] = {1, 5, 10, 25, 50};
 
-	int *dp = new int[n];
+	uint64_t *dp = new uint64_t[n];
 
 	for (int i=0; i<n; ++i) dp[i] = 1;
 
