@@ -14,18 +14,18 @@ void Solve(int n)
 {
 	static int coins[5] = {1, 5, 10, 25, 50};
 
-	uint64_t *dp = new uint64_t[n];
+	uint64_t *dp = new uint64_t[n+1];
 
-	for (int i=0; i<n; ++i) dp[i] = 1;
+	for (int i=0; i<=n; ++i) dp[i] = 1;
 
 	for (int coin=1; coin<5; ++coin) {
 		int coin_value = coins[coin];
-		for (int i=coin_value; i<n; ++i) {
+		for (int i=coin_value; i<=n; ++i) {
 			dp[i] += dp[i-coin_value];
 		}
 	}
 
-	PrintAnswer(dp[n-1], n);
+	PrintAnswer(dp[n], n);
 
 	delete [] dp;
 }
