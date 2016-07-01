@@ -7,7 +7,6 @@ struct Turtle
 {
 	int weight;
 	int strength;
-
 };
 
 bool TurtleComparator(Turtle const& lhs, Turtle const& rhs)
@@ -30,33 +29,48 @@ public:
 		//        If not, it can be swapped to be nearer to the bottom
 		std::sort(turtles_.begin(), turtles_.end(), TurtleComparator);
 
+		for (auto const& turtle: turtles_) {
+			std::cout << "Turtle: weight: " << turtle.weight << ", strength: " << turtle.strength << std::endl;
+		}
+
 		if (turtles_.empty()) return 0;
 
 		int n = (int)turtles_.size();
 		int *dp = new int[n];
 
-		// consider only the first turtle
-		dp[0] = turtles_[0].weight;
-		for (int i=1; i<n; ++i) {
-			dp[i] = 0;
+		for (int i=0; i<n; ++i) {
+			dp[i] = -1;
 		}
-		int maximum_height = 1;
+		int maximum_height = 0;
 
-		for (int i=1; i<n; ++i) {
+		for (int i=0; i<n; ++i) {
 			// add i-th turtle
+			std::cout << "adding " << i << "-th turtle" << std::endl;
 			int load = turtles_[i].strength - turtles_[i].weight;
 
 			for (int height=n-1; height>=0; --height) {
-				if (dp[i-1] < 0) {
+				if (height == 0) {
+					if (dp[0] < 0) dp[0] = turtles_[i].weight;
+					else dp[0] = std::min(dp[0], turtles_[i].weight);
+					std::cout << "dp[" << height << "] = " << dp[height] << std::endl;
+					continue;
+				}
+
+				if (dp[height-1] < 0) {
 					// the previous (i-1) turtles cannot form a pile with height=(height-1)
 					// so, it's impossible to form a pile with height=(height) with i-th turtle
-					// dp[i] = -1; (not changed)
+					// dp[height] not changed
 				} else {
-					if (load >= dp[i-1]) {
-						dp[i] += turtles_[i].weight;
-						maximum_height = std::max(height, maximum_height);
+					if (load >= dp[height-1]) {
+						int new_weight = dp[height-1] + turtles_[i].weight;
+
+						if (dp[height] < 0) dp[height] = new_weight;
+						else dp[height] = std::min(new_weight, dp[height]);
+						std::cout << "dp[" << height << "] = " << dp[height] << std::endl;
+
+						maximum_height = std::max(height+1, maximum_height);
 					} else {
-						dp[i] = -1;
+						// dp[height] not changed
 					}
 				}
 			}
