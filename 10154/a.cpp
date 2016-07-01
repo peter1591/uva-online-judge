@@ -29,10 +29,6 @@ public:
 		//        If not, it can be swapped to be nearer to the bottom
 		std::sort(turtles_.begin(), turtles_.end(), TurtleComparator);
 
-		for (auto const& turtle: turtles_) {
-			std::cout << "Turtle: weight: " << turtle.weight << ", strength: " << turtle.strength << std::endl;
-		}
-
 		if (turtles_.empty()) return 0;
 
 		int n = (int)turtles_.size();
@@ -45,14 +41,12 @@ public:
 
 		for (int i=0; i<n; ++i) {
 			// add i-th turtle
-			std::cout << "adding " << i << "-th turtle" << std::endl;
 			int load = turtles_[i].strength - turtles_[i].weight;
 
 			for (int height=n-1; height>=0; --height) {
 				if (height == 0) {
 					if (dp[0] < 0) dp[0] = turtles_[i].weight;
 					else dp[0] = std::min(dp[0], turtles_[i].weight);
-					std::cout << "dp[" << height << "] = " << dp[height] << std::endl;
 					continue;
 				}
 
@@ -66,7 +60,6 @@ public:
 
 						if (dp[height] < 0) dp[height] = new_weight;
 						else dp[height] = std::min(new_weight, dp[height]);
-						std::cout << "dp[" << height << "] = " << dp[height] << std::endl;
 
 						maximum_height = std::max(height+1, maximum_height);
 					} else {
